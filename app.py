@@ -37,6 +37,27 @@ if st.button("Generate ID Card") and template_file and photo_file:
     except:
         font_large = font_small = ImageFont.load_default()
 
+    # Add text to ID card
     draw.text((220, 200), f"Name: {name}", fill="white", font=font_large)
     draw.text((220, 240), f"ID: {id_number}", fill="white", font=font_small)
-    draw.text((220, 280), f"Dept: {department}", fill="white"
+    draw.text((220, 280), f"Dept: {department}", fill="white", font=font_small)
+
+    # Save to in-memory buffer
+    output = io.BytesIO()
+    template.save(output, format='PNG')
+    output.seek(0)
+
+    # Display image
+    st.image(template, caption="🖼 Final ID Card", use_column_width=True)
+
+    # Download button
+    st.download_button(
+        label="📥 Download ID Card",
+        data=output,
+        file_name="ID_Card.png",
+        mime="image/png"
+    )
+
+elif st.button("Generate ID Card"):
+    st.error("Please upload both the template and the photo.")
+
